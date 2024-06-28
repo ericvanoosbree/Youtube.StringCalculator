@@ -82,5 +82,62 @@ namespace StringCalculator.Tests
             action.Should().Throw<Exception>()
                 .WithMessage("Negatives not allowed: " + negativeNumbers);
         }
+
+        [Theory]
+        [InlineData("2,1001", 2)]
+        [InlineData("//;\n1;2;1001", 3)]
+        public void Add_AddNumbersLessThanOrEqualToOneThousand_WhenStringIsValid(string calculation, int expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            var result = sut.Add(calculation);
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("//[***]\n1***2***3", 6)]
+        public void Add_AddsNumbersUsingDelimiterOfAnyLength_WhenStringIsValid(string calculation, int expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            var result = sut.Add(calculation);
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("//[*][%]\n1*2%3", 6)]
+        public void Add_AddsNumbersUsingMultipleDelimeters_WhenStringIsValid(string calculation, int expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            var result = sut.Add(calculation);
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("//[**][%&]\n1**2%&3", 6)]
+        public void Add_AddsNumbersUsingMultipleDelimetersLongerThanOneChar_WhenStringIsValid(string calculation, int expected)
+        {
+            // Arrange
+            var sut = new Calculator();
+
+            // Act
+            var result = sut.Add(calculation);
+
+            // Assert
+            result.Should().Be(expected);
+        }
     }
 }
